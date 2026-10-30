@@ -27,3 +27,25 @@ episode_lines |>
   ) +
   theme_minimal()
 ```
+
+```{r}
+episode_lines |>
+  mutate(character = str_remove_all(character, "[:\"]")) |>
+  filter(character %in% c("Randy", "Mr. Garrison", "Chef", "Gerald", "Sharon", "Mr. Mackey")) |>
+  count(season_number, character) |>
+  # Fill in 0 for seasons where a character had no lines (e.g., Chef in later seasons)
+  complete(season_number = 1:21, character, fill = list(n = 0)) |>
+  ggplot(aes(x = season_number, y = n, color = character)) +
+  geom_line(linewidth = 1) +
+  geom_point() +
+  scale_x_continuous(breaks = 1:21) +
+  labs(
+    title = "Dialogue by Significant Adult Characters Across Seasons",
+    subtitle = "Randy Marsh rises dramatically after Season 8 to dominate adult dialogue",
+    x = "Season",
+    y = "Number of Dialogue Lines",
+    color = "Character",
+    caption = "Source: southparkr package"
+  ) +
+  theme_minimal()
+```
