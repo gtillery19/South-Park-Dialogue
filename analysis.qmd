@@ -4,5 +4,26 @@ format: html
 ---
 
 ```{r}
+#| message: false
+library(tidyverse)
 library(southparkr)
+
+episode_lines |>
+  # Remove colons/quotes attached to some character names (e.g., "Cartman:")
+  mutate(character = str_remove_all(character, "[:\"]")) |>
+  filter(character %in% c("Stan", "Kyle", "Cartman", "Kenny")) |>
+  count(season_number, character) |>
+  ggplot(aes(x = season_number, y = n, color = character)) +
+  geom_line(linewidth = 1) +
+  geom_point() +
+  scale_x_continuous(breaks = 1:21) +
+  labs(
+    title = "Dialogue by Main South Park Characters Across Seasons",
+    subtitle = "Cartman consistently has the most lines, while Kenny has the fewest",
+    x = "Season",
+    y = "Number of Dialogue Lines",
+    color = "Character",
+    caption = "Source: southparkr package"
+  ) +
+  theme_minimal()
 ```
