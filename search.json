@@ -1,0 +1,16 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Analysis",
+    "section": "",
+    "text": "library(tidyverse)\nlibrary(southparkr)\n\nepisode_lines |&gt;\n  # Remove colons/quotes attached to some character names (e.g., \"Cartman:\")\n  mutate(character = str_remove_all(character, \"[:\\\"]\")) |&gt;\n  filter(character %in% c(\"Stan\", \"Kyle\", \"Cartman\", \"Kenny\")) |&gt;\n  count(season_number, character) |&gt;\n  ggplot(aes(x = season_number, y = n, color = character)) +\n  geom_line(linewidth = 1) +\n  geom_point() +\n  scale_x_continuous(breaks = 1:21) +\n  labs(\n    title = \"Dialogue by Main South Park Characters Across Seasons\",\n    subtitle = \"Cartman consistently has the most lines, while Kenny has the fewest\",\n    x = \"Season\",\n    y = \"Number of Dialogue Lines\",\n    color = \"Character\",\n    caption = \"Source: southparkr package\"\n  ) +\n  theme_minimal()\n\n\n\n\n\n\n\n\n\nepisode_lines |&gt;\n  mutate(character = str_remove_all(character, \"[:\\\"]\")) |&gt;\n  filter(character %in% c(\"Randy\", \"Mr. Garrison\", \"Chef\", \"Gerald\", \"Sharon\", \"Mr. Mackey\")) |&gt;\n  count(season_number, character) |&gt;\n  # Fill in 0 for seasons where a character had no lines (e.g., Chef in later seasons)\n  complete(season_number = 1:21, character, fill = list(n = 0)) |&gt;\n  ggplot(aes(x = season_number, y = n, color = character)) +\n  geom_line(linewidth = 1) +\n  geom_point() +\n  scale_x_continuous(breaks = 1:21) +\n  labs(\n    title = \"Dialogue by Significant Adult Characters Across Seasons\",\n    subtitle = \"Randy Marsh rises dramatically after Season 8 to dominate adult dialogue\",\n    x = \"Season\",\n    y = \"Number of Dialogue Lines\",\n    color = \"Character\",\n    caption = \"Source: southparkr package\"\n  ) +\n  theme_minimal()"
+  },
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
+    "section": "",
+    "text": "About this site"
+  }
+]
