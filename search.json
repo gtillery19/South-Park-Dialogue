@@ -2,15 +2,78 @@
   {
     "objectID": "index.html",
     "href": "index.html",
-    "title": "Analysis",
+    "title": "The Evolution of South Park",
     "section": "",
-    "text": "library(tidyverse)\nlibrary(southparkr)\n\nepisode_lines |&gt;\n  # Remove colons/quotes attached to some character names (e.g., \"Cartman:\")\n  mutate(character = str_remove_all(character, \"[:\\\"]\")) |&gt;\n  filter(character %in% c(\"Stan\", \"Kyle\", \"Cartman\", \"Kenny\")) |&gt;\n  count(season_number, character) |&gt;\n  ggplot(aes(x = season_number, y = n, color = character)) +\n  geom_line(linewidth = 1) +\n  geom_point() +\n  scale_x_continuous(breaks = 1:21) +\n  labs(\n    title = \"Dialogue by Main South Park Characters Across Seasons\",\n    subtitle = \"Cartman consistently has the most lines, while Kenny has the fewest\",\n    x = \"Season\",\n    y = \"Number of Dialogue Lines\",\n    color = \"Character\",\n    caption = \"Source: southparkr package\"\n  ) +\n  theme_minimal()\n\n\n\n\n\n\n\n\n\nepisode_lines |&gt;\n  mutate(character = str_remove_all(character, \"[:\\\"]\")) |&gt;\n  filter(character %in% c(\"Randy\", \"Mr. Garrison\", \"Chef\", \"Gerald\", \"Sharon\", \"Mr. Mackey\")) |&gt;\n  count(season_number, character) |&gt;\n  # Fill in 0 for seasons where a character had no lines (e.g., Chef in later seasons)\n  complete(season_number = 1:21, character, fill = list(n = 0)) |&gt;\n  ggplot(aes(x = season_number, y = n, color = character)) +\n  geom_line(linewidth = 1) +\n  geom_point() +\n  scale_x_continuous(breaks = 1:21) +\n  labs(\n    title = \"Dialogue by Significant Adult Characters Across Seasons\",\n    subtitle = \"Randy Marsh rises dramatically after Season 8 to dominate adult dialogue\",\n    x = \"Season\",\n    y = \"Number of Dialogue Lines\",\n    color = \"Character\",\n    caption = \"Source: southparkr package\"\n  ) +\n  theme_minimal()"
+    "text": "South Park began with four elementary-school students at its center. As the series progressed, adult characters - especially Randy - became more prominent in its storytelling. This investigation asks whether the dialogue data supports that shift and what it can tell us about it.\nThe analysis uses transcript lines from the southparkr package, covering seasons 1-21 (1997-2017). Dialogue share measures who speaks, not screen time or story importance. The selected adult cast is Randy, Mr. Garrison, Chef, Gerald, Sharon, and Mr. Mackey."
+  },
+  {
+    "objectID": "index.html#introduction",
+    "href": "index.html#introduction",
+    "title": "The Evolution of South Park",
+    "section": "",
+    "text": "South Park began with four elementary-school students at its center. As the series progressed, adult characters - especially Randy - became more prominent in its storytelling. This investigation asks whether the dialogue data supports that shift and what it can tell us about it.\nThe analysis uses transcript lines from the southparkr package, covering seasons 1-21 (1997-2017). Dialogue share measures who speaks, not screen time or story importance. The selected adult cast is Randy, Mr. Garrison, Chef, Gerald, Sharon, and Mr. Mackey."
+  },
+  {
+    "objectID": "index.html#the-changing-cast",
+    "href": "index.html#the-changing-cast",
+    "title": "The Evolution of South Park",
+    "section": "01 - The changing cast",
+    "text": "01 - The changing cast\nThe chart compares the share of all recorded transcript lines spoken by the four boys and the six selected adults. Hover over points for the underlying line counts. Click legend entries to show or hide a group.\n\n\n\n\n\n\nAcross seasons 1-7, the boys average 37.5% of recorded lines; across seasons 15-21, their average is 28.9%. The selected adults’ mean share shifts more modestly, from 10.1% to 11.5%."
+  },
+  {
+    "objectID": "index.html#the-randy-effect",
+    "href": "index.html#the-randy-effect",
+    "title": "The Evolution of South Park",
+    "section": "02 - The Randy effect",
+    "text": "02 - The Randy effect\nThis view compares Randy with the other selected adults. It measures each character’s share of dialogue from this six-character adult group. For an example of a Randy-focused story, see the official South Park clip, “On a Colorado Farm”.\n\n\n\n\n\n\nRandy’s share of the selected adults’ dialogue rises from 4% in season 1 to 75% in season 21. However, the selected adults together account for 13% of all recorded lines in season 1 and 11.2% in season 21. Randy’s rise is a major change in which adults speak; it does not mean that the whole adult group has a larger share than at the start."
+  },
+  {
+    "objectID": "index.html#why-did-this-happen",
+    "href": "index.html#why-did-this-happen",
+    "title": "The Evolution of South Park",
+    "section": "03 - Why did this happen?",
+    "text": "03 - Why did this happen?\nTo explore adult-centered episodes, an episode is counted as adult-led when the six selected adults have more recorded dialogue lines than the four boys combined. This is a dialogue-based proxy, not an official classification of the episode’s plot. Hover over a point to see the number of adult-led episodes and the season’s total.\n\n\n\n\n\n\nSeasons 18 and 20 provide context: season 18 featured continuing storylines, and season 20 used a more linear season-long arc. In season 20, 4 of 10 episodes (40%) meet this dialogue-based adult-led definition. The overlap is worth exploring, but it does not show that serialization caused adult dialogue to rise. A later opinion review discusses the show’s more explicitly political subject matter; that article postdates the transcript data and is context, not evidence for this analysis."
+  },
+  {
+    "objectID": "index.html#conclusion",
+    "href": "index.html#conclusion",
+    "title": "The Evolution of South Park",
+    "section": "04 - Conclusion",
+    "text": "04 - Conclusion\n\nThe data supports: the boys’ mean share of transcript lines falls from 37.5% in seasons 1-7 to 28.9% in seasons 15-21. The selected adults’ mean share rises more modestly, from 10.1% to 11.5%.\nThe data suggests: Randy becomes dominant within the selected adult cast, accounting for 4% of its lines in season 1 and 75% in season 21. The adult-led episode measure also peaks during the serialized-storyline period in this dataset.\nThe data cannot establish: dialogue counts do not measure screen time, narrative importance, or what themes characters discuss. These transcripts alone cannot show that serialization or changing subject matter caused the observed shifts.\n\nThe analysis covers only seasons 1-21 (1997-2017) and the selected adult characters listed above."
   },
   {
     "objectID": "about.html",
     "href": "about.html",
     "title": "About",
     "section": "",
-    "text": "About this site"
+    "text": "About this site\nAuthor: Greta Tillery"
+  },
+  {
+    "objectID": "story.html#the-discovery",
+    "href": "story.html#the-discovery",
+    "title": "The Rise of Randy Marsh",
+    "section": "The discovery",
+    "text": "The discovery\nFor much of its early history, South Park primarily followed Stan, Kyle, Cartman, and Kenny. The transcript data points to a striking change in dialogue prominence: Randy Marsh’s share rises as Stan Marsh’s share declines."
+  },
+  {
+    "objectID": "story.html#the-evidence",
+    "href": "story.html#the-evidence",
+    "title": "The Rise of Randy Marsh",
+    "section": "The evidence",
+    "text": "The evidence\nThis interactive chart compares Randy and Stan’s recorded dialogue lines as a share of all transcript lines in each season. Hover over a point to see the season’s line count and share. The data comes from the southparkr package and covers seasons 1-21 (1997-2017).\n\n\n\n\n\n\nIn seasons 1-7, Randy averages 2.1% of recorded lines, compared with Stan’s 11.9%. By seasons 15-21, Randy’s average rises to 6%, while Stan’s falls to 6.1%. In the later period, their dialogue shares are nearly equal."
+  },
+  {
+    "objectID": "story.html#why-it-matters",
+    "href": "story.html#why-it-matters",
+    "title": "The Rise of Randy Marsh",
+    "section": "Why it matters",
+    "text": "Why it matters\nRandy’s rising prominence suggests that the show’s narrative focus expanded beyond the boys’ experiences to give more space to adult and family perspectives. The change also overlaps with seasons that experimented with continuing storylines, including season 18 and season 20. That timing offers context, but this chart cannot show that serialization or social satire caused Randy’s rise. Dialogue share measures who speaks, not screen time or story importance."
+  },
+  {
+    "objectID": "story.html#beyond-the-data",
+    "href": "story.html#beyond-the-data",
+    "title": "The Rise of Randy Marsh",
+    "section": "Beyond the data",
+    "text": "Beyond the data\nThe transcripts end at season 21, so they do not include season 22. That boundary matters: season 22 introduced Tegridy Farms, giving Randy an ongoing storyline largely independent of the boys. It is a later example of Randy-centered storytelling, not something this dataset can measure. See the season 22 overview and South Park: Randy on Prime Video.\nFor the full data investigation and methods, return to the Home page."
   }
 ]
