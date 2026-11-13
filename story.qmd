@@ -1,0 +1,136 @@
+---
+title: "The Rise of Randy Marsh"
+subtitle: "A STORY ABOUT SOUTH PARK'S CHANGING FOCUS"
+format: html
+---
+
+<div class="story-banner" role="img" aria-label="A stylized snowy Colorado mountain landscape with evergreen trees and a small town.">
+<svg viewBox="0 0 1200 240" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="winter-sky" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0" stop-color="#a9d8e8"/>
+      <stop offset="1" stop-color="#eaf5f3"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="240" fill="url(#winter-sky)"/>
+  <circle cx="1010" cy="48" r="27" fill="#f4ca6b"/>
+  <path d="M0 195 150 88 230 150 350 57 520 195 650 94 785 195Z" fill="#7897a1"/>
+  <path d="m118 111 32-23 32 23-22-8-10 11-11-12Zm200-31 32-23 36 29-25-10-12 11-12-13Zm298 45 34-31 35 33-24-11-12 12-11-13Z" fill="#f7fbfa"/>
+  <path d="m410 210 220-120 112 86 136-108 240 142v30H410Z" fill="#547983"/>
+  <path d="m588 124 42-34 40 36-29-12-12 13-14-14Zm252-5 38-51 49 52-34-18-15 17-15-17Z" fill="#f7fbfa"/>
+  <path d="M0 205c180-25 295 22 455 1s300-22 430 0 225 12 315-2v36H0Z" fill="#f8fbf8"/>
+  <g fill="#365f59">
+    <path d="m65 235 29-43H78l23-35H87l27-42 27 42h-14l23 35h-16l29 43Z"/>
+    <path d="m176 235 25-37h-14l21-31h-12l24-38 24 38h-12l21 31h-14l25 37Z"/>
+    <path d="m1040 235 28-42h-16l22-33h-13l26-40 26 40h-13l22 33h-16l28 42Z"/>
+    <path d="m1110 235 22-33h-13l18-27h-11l21-33 21 33h-11l18 27h-13l22 33Z"/>
+  </g>
+  <g>
+    <path d="m490 213 30-26 30 26v28h-60Z" fill="#d77b58"/>
+    <path d="m480 214 40-35 40 35Z" fill="#8b5147"/>
+    <rect x="513" y="221" width="13" height="20" fill="#f5e7c7"/>
+    <path d="m570 215 27-22 27 22v26h-54Z" fill="#6c9a9d"/>
+    <path d="m561 216 36-31 36 31Z" fill="#446b73"/>
+    <rect x="590" y="222" width="12" height="19" fill="#f5e7c7"/>
+  </g>
+</svg>
+</div>
+
+## The discovery
+
+For much of its early history, *South Park* primarily followed Stan, Kyle, Cartman, and Kenny. The transcript data points to a striking change in dialogue prominence: Randy Marsh's share rises as Stan Marsh's share declines.
+
+## The evidence
+
+This interactive chart compares Randy and Stan's recorded dialogue lines as a share of all transcript lines in each season. Hover over a point to see the season's line count and share. The data comes from the [`southparkr` package](https://github.com/pdrhlik/southparkr) and covers seasons 1-21 (1997-2017).
+
+```{r}
+#| message: false
+library(tidyverse)
+library(southparkr)
+library(plotly)
+
+dialogue_lines <- episode_lines |>
+  mutate(character = str_remove_all(character, "[:\"]"))
+
+season_totals <- dialogue_lines |>
+  count(season_number, name = "all_lines")
+
+seasons <- sort(unique(dialogue_lines$season_number))
+
+randy_stan_by_season <- dialogue_lines |>
+  filter(character %in% c("Randy", "Stan")) |>
+  count(season_number, character, name = "lines") |>
+  complete(
+    season_number = seasons,
+    character = c("Randy", "Stan"),
+    fill = list(lines = 0)
+  ) |>
+  left_join(season_totals, by = "season_number") |>
+  mutate(
+    share = 100 * lines / all_lines,
+    period = case_when(
+      season_number <= 7 ~ "Early",
+      season_number <= 14 ~ "Middle",
+      TRUE ~ "Later"
+    ),
+    character_label = recode(character, Randy = "Randy Marsh", Stan = "Stan Marsh")
+  )
+
+period_shares <- randy_stan_by_season |>
+  group_by(period, character) |>
+  summarise(mean_share = mean(share), .groups = "drop")
+
+randy_early_share <- period_shares |>
+  filter(period == "Early", character == "Randy") |>
+  pull(mean_share)
+randy_later_share <- period_shares |>
+  filter(period == "Later", character == "Randy") |>
+  pull(mean_share)
+stan_early_share <- period_shares |>
+  filter(period == "Early", character == "Stan") |>
+  pull(mean_share)
+stan_later_share <- period_shares |>
+  filter(period == "Later", character == "Stan") |>
+  pull(mean_share)
+
+randy_stan_plot <- randy_stan_by_season |>
+  ggplot(aes(
+    x = season_number,
+    y = share,
+    color = character_label,
+    group = character_label,
+    text = paste(
+      "Season:", season_number,
+      "<br>Character:", character_label,
+      "<br>Transcript lines:", lines,
+      "<br>Share of all lines:", round(share, 2), "%"
+    )
+  )) +
+  geom_line(linewidth = 1) +
+  geom_point() +
+  scale_x_continuous(breaks = seasons) +
+  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
+  labs(
+    title = "Randy's dialogue share rises toward Stan's",
+    x = "Season",
+    y = "Share of all recorded dialogue",
+    color = "Character",
+    caption = "Source: southparkr transcript data; each season is normalized by its total recorded lines."
+  ) +
+  theme_minimal()
+
+ggplotly(randy_stan_plot, tooltip = "text")
+```
+
+In seasons 1-7, Randy averages `r round(randy_early_share, 1)`% of recorded lines, compared with Stan's `r round(stan_early_share, 1)`%. By seasons 15-21, Randy's average rises to `r round(randy_later_share, 1)`%, while Stan's falls to `r round(stan_later_share, 1)`%. In the later period, their dialogue shares are nearly equal.
+
+## Why it matters
+
+Randy's rising prominence suggests that the show's narrative focus expanded beyond the boys' experiences to give more space to adult and family perspectives. The change also overlaps with seasons that experimented with continuing storylines, including [season 18](https://en.wikipedia.org/wiki/South_Park_(season_18)) and [season 20](https://en.wikipedia.org/wiki/South_Park_(season_20)). That timing offers context, but this chart cannot show that serialization or social satire caused Randy's rise. Dialogue share measures who speaks, not screen time or story importance.
+
+## Beyond the data
+
+The transcripts end at season 21, so they do not include season 22. That boundary matters: season 22 introduced Tegridy Farms, giving Randy an ongoing storyline largely independent of the boys. It is a later example of Randy-centered storytelling, not something this dataset can measure. See the [season 22 overview](https://en.wikipedia.org/wiki/South_Park_(season_22)) and [South Park: Randy on Prime Video](https://www.primevideo.com/detail/South-Park-Randy/0MJAY5B8UONN6KYPMLCJZV8UL8).
+
+For the full data investigation and methods, return to the [Home page](index.qmd).

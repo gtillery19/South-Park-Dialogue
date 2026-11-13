@@ -1,1 +1,73 @@
 /* css styles */
+:root {
+  --site-ink: #263d45;
+  --site-teal: #245c68;
+  --site-deep-teal: #173f49;
+  --site-rust: #a63f29;
+  --site-gold: #e6b958;
+  --site-paper: #f3f8f6;
+}
+
+body {
+  color: var(--site-ink);
+  background: linear-gradient(180deg, #eaf5f7 0, var(--site-paper) 24rem);
+}
+
+#quarto-header .navbar {
+  background-color: var(--site-deep-teal) !important;
+  border-bottom: 4px solid var(--site-gold);
+}
+
+#quarto-header .navbar-brand,
+#quarto-header .navbar-title,
+#quarto-header .navbar-nav .nav-link {
+  color: #f8fbfa !important;
+}
+
+#quarto-header .navbar-nav .nav-link:hover,
+#quarto-header .navbar-nav .nav-link.active {
+  color: #ffe3a2 !important;
+}
+
+h1,
+h2,
+h3 {
+  color: var(--site-teal);
+}
+
+h2 {
+  padding-left: 0.65rem;
+  border-left: 4px solid var(--site-gold);
+}
+
+a:not(.nav-link) {
+  color: var(--site-rust);
+  text-decoration-thickness: 0.08em;
+  text-underline-offset: 0.15em;
+}
+
+a:not(.nav-link):hover {
+  color: var(--site-deep-teal);
+}
+
+.plotly.html-widget {
+  overflow: hidden;
+  border: 1px solid #d5e5e8;
+  border-radius: 0.75rem;
+  background-color: #fff;
+  box-shadow: 0 0.5rem 1.25rem rgb(35 70 82 / 10%);
+}
+
+.story-banner {
+  margin: 1rem 0 2.25rem;
+  overflow: hidden;
+  border: 1px solid #d5e5e8;
+  border-radius: 1rem;
+  box-shadow: 0 0.75rem 1.75rem rgb(35 70 82 / 14%);
+}
+
+.story-banner svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}

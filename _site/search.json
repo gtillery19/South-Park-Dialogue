@@ -47,5 +47,33 @@
     "title": "About",
     "section": "",
     "text": "About this site\nAuthor: Greta Tillery"
+  },
+  {
+    "objectID": "story.html#the-discovery",
+    "href": "story.html#the-discovery",
+    "title": "The Rise of Randy Marsh",
+    "section": "The discovery",
+    "text": "The discovery\nFor much of its early history, South Park primarily followed Stan, Kyle, Cartman, and Kenny. The transcript data points to a striking change in dialogue prominence: Randy Marsh’s share rises as Stan Marsh’s share declines."
+  },
+  {
+    "objectID": "story.html#the-evidence",
+    "href": "story.html#the-evidence",
+    "title": "The Rise of Randy Marsh",
+    "section": "The evidence",
+    "text": "The evidence\nThis interactive chart compares Randy and Stan’s recorded dialogue lines as a share of all transcript lines in each season. Hover over a point to see the season’s line count and share. The data comes from the southparkr package and covers seasons 1-21 (1997-2017).\n\n\n\n\n\n\nIn seasons 1-7, Randy averages 2.1% of recorded lines, compared with Stan’s 11.9%. By seasons 15-21, Randy’s average rises to 6%, while Stan’s falls to 6.1%. In the later period, their dialogue shares are nearly equal."
+  },
+  {
+    "objectID": "story.html#why-it-matters",
+    "href": "story.html#why-it-matters",
+    "title": "The Rise of Randy Marsh",
+    "section": "Why it matters",
+    "text": "Why it matters\nRandy’s rising prominence suggests that the show’s narrative focus expanded beyond the boys’ experiences to give more space to adult and family perspectives. The change also overlaps with seasons that experimented with continuing storylines, including season 18 and season 20. That timing offers context, but this chart cannot show that serialization or social satire caused Randy’s rise. Dialogue share measures who speaks, not screen time or story importance."
+  },
+  {
+    "objectID": "story.html#beyond-the-data",
+    "href": "story.html#beyond-the-data",
+    "title": "The Rise of Randy Marsh",
+    "section": "Beyond the data",
+    "text": "Beyond the data\nThe transcripts end at season 21, so they do not include season 22. That boundary matters: season 22 introduced Tegridy Farms, giving Randy an ongoing storyline largely independent of the boys. It is a later example of Randy-centered storytelling, not something this dataset can measure. See the season 22 overview and South Park: Randy on Prime Video.\nFor the full data investigation and methods, return to the Home page."
   }
 ]

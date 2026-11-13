@@ -5,11 +5,13 @@ metadata:
   author: "Greta Tillery"
 
 website:
-  title: "southparkranalysis"
+  title: "Randy Takeover"
   navbar:
     left:
       - href: index.qmd
         text: Home
+      - href: story.qmd
+        text: Story
       - about.qmd
 
 execute:
