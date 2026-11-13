@@ -1,51 +1,232 @@
 ---
-title: "Analysis"
+title: "The Evolution of South Park"
+subtitle: "DATA INVESTIGATION | CHARACTER PROMINENCE"
 format: html
 ---
+
+## Introduction
+
+*South Park* began with four elementary-school students at its center. As the series progressed, adult characters - especially Randy - became more prominent in its storytelling. This investigation asks whether the dialogue data supports that shift and what it can tell us about it.
+
+The analysis uses transcript lines from the [`southparkr` package](https://github.com/pdrhlik/southparkr), covering seasons 1-21 (1997-2017). Dialogue share measures who speaks, not screen time or story importance. The selected adult cast is Randy, Mr. Garrison, Chef, Gerald, Sharon, and Mr. Mackey.
 
 ```{r}
 #| message: false
 library(tidyverse)
 library(southparkr)
+library(plotly)
 
-episode_lines |>
-  # Remove colons/quotes attached to some character names (e.g., "Cartman:")
-  mutate(character = str_remove_all(character, "[:\"]")) |>
-  filter(character %in% c("Stan", "Kyle", "Cartman", "Kenny")) |>
-  count(season_number, character) |>
-  ggplot(aes(x = season_number, y = n, color = character)) +
-  geom_line(linewidth = 1) +
-  geom_point() +
-  scale_x_continuous(breaks = 1:21) +
-  labs(
-    title = "Dialogue by Main South Park Characters Across Seasons",
-    subtitle = "Cartman consistently has the most lines, while Kenny has the fewest",
-    x = "Season",
-    y = "Number of Dialogue Lines",
-    color = "Character",
-    caption = "Source: southparkr package"
-  ) +
-  theme_minimal()
+core_boys <- c("Stan", "Kyle", "Cartman", "Kenny")
+selected_adults <- c("Randy", "Mr. Garrison", "Chef", "Gerald", "Sharon", "Mr. Mackey")
+seasons <- sort(unique(episode_lines$season_number))
+
+dialogue_lines <- episode_lines |>
+  mutate(character = str_remove_all(character, "[:\"]"))
+
+season_totals <- dialogue_lines |>
+  count(season_number, name = "total_lines")
+
+cast_season_counts <- dialogue_lines |>
+  filter(character %in% c(core_boys, selected_adults)) |>
+  mutate(cast = if_else(character %in% core_boys, "The four boys", "Selected adults")) |>
+  count(season_number, cast, name = "lines") |>
+  complete(
+    season_number = seasons,
+    cast = c("The four boys", "Selected adults"),
+    fill = list(lines = 0)
+  ) |>
+  left_join(season_totals, by = "season_number") |>
+  mutate(share = 100 * lines / total_lines)
+
+cast_period_summary <- cast_season_counts |>
+  mutate(period = case_when(
+    season_number <= 7 ~ "Early",
+    season_number >= 15 ~ "Late",
+    TRUE ~ NA_character_
+  )) |>
+  filter(!is.na(period)) |>
+  group_by(period, cast) |>
+  summarise(mean_share = mean(share), .groups = "drop")
+
+early_boys_share <- cast_period_summary |>
+  filter(period == "Early", cast == "The four boys") |>
+  pull(mean_share)
+late_boys_share <- cast_period_summary |>
+  filter(period == "Late", cast == "The four boys") |>
+  pull(mean_share)
+early_adult_share <- cast_period_summary |>
+  filter(period == "Early", cast == "Selected adults") |>
+  pull(mean_share)
+late_adult_share <- cast_period_summary |>
+  filter(period == "Late", cast == "Selected adults") |>
+  pull(mean_share)
+
+adult_character_counts <- dialogue_lines |>
+  filter(character %in% selected_adults) |>
+  count(season_number, character, name = "lines") |>
+  complete(season_number = seasons, character = selected_adults, fill = list(lines = 0)) |>
+  group_by(season_number) |>
+  mutate(
+    adult_cast_lines = sum(lines),
+    share = 100 * lines / adult_cast_lines
+  ) |>
+  ungroup()
+
+randy_start_share <- adult_character_counts |>
+  filter(season_number == min(seasons), character == "Randy") |>
+  pull(share)
+randy_end_share <- adult_character_counts |>
+  filter(season_number == max(seasons), character == "Randy") |>
+  pull(share)
+adult_start_share <- cast_season_counts |>
+  filter(season_number == min(seasons), cast == "Selected adults") |>
+  pull(share)
+adult_end_share <- cast_season_counts |>
+  filter(season_number == max(seasons), cast == "Selected adults") |>
+  pull(share)
+
+episode_catalog <- dialogue_lines |>
+  distinct(season_number, season_episode_number, episode_name)
+
+episode_cast_counts <- dialogue_lines |>
+  filter(character %in% c(core_boys, selected_adults)) |>
+  mutate(cast = if_else(character %in% core_boys, "boys", "adults")) |>
+  count(season_number, season_episode_number, episode_name, cast, name = "lines") |>
+  pivot_wider(names_from = cast, values_from = lines, values_fill = 0)
+
+adult_led_episodes <- episode_catalog |>
+  left_join(
+    episode_cast_counts,
+    by = c("season_number", "season_episode_number", "episode_name")
+  ) |>
+  mutate(
+    across(c(boys, adults), \(x) replace_na(x, 0L)),
+    adult_led = adults > boys
+  )
+
+adult_led_by_season <- adult_led_episodes |>
+  group_by(season_number) |>
+  summarise(
+    total_episodes = n(),
+    adult_led_count = sum(adult_led),
+    adult_led_share = 100 * mean(adult_led),
+    .groups = "drop"
+  )
+
+season_20_result <- adult_led_by_season |>
+  filter(season_number == 20)
+season_20_count <- season_20_result$adult_led_count
+season_20_total <- season_20_result$total_episodes
+season_20_share <- season_20_result$adult_led_share
 ```
+
+## 01 - The changing cast
+
+The chart compares the share of all recorded transcript lines spoken by the four boys and the six selected adults. Hover over points for the underlying line counts. Click legend entries to show or hide a group.
 
 ```{r}
-episode_lines |>
-  mutate(character = str_remove_all(character, "[:\"]")) |>
-  filter(character %in% c("Randy", "Mr. Garrison", "Chef", "Gerald", "Sharon", "Mr. Mackey")) |>
-  count(season_number, character) |>
-  # Fill in 0 for seasons where a character had no lines (e.g., Chef in later seasons)
-  complete(season_number = 1:21, character, fill = list(n = 0)) |>
-  ggplot(aes(x = season_number, y = n, color = character)) +
+cast_share_plot <- cast_season_counts |>
+  ggplot(aes(
+    x = season_number,
+    y = share,
+    color = cast,
+    text = paste(
+      "Season:", season_number,
+      "<br>Group:", cast,
+      "<br>Transcript lines:", lines,
+      "<br>Share of all lines:", round(share, 1), "%"
+    )
+  )) +
   geom_line(linewidth = 1) +
   geom_point() +
-  scale_x_continuous(breaks = 1:21) +
+  scale_x_continuous(breaks = seasons) +
+  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
   labs(
-    title = "Dialogue by Significant Adult Characters Across Seasons",
-    subtitle = "Randy Marsh rises dramatically after Season 8 to dominate adult dialogue",
+    title = "Character prominence by season",
     x = "Season",
-    y = "Number of Dialogue Lines",
-    color = "Character",
+    y = "Share of all transcript lines",
+    color = "Group",
     caption = "Source: southparkr package"
   ) +
   theme_minimal()
+
+ggplotly(cast_share_plot, tooltip = "text")
 ```
+
+Across seasons 1-7, the boys average `r round(early_boys_share, 1)`% of recorded lines; across seasons 15-21, their average is `r round(late_boys_share, 1)`%. The selected adults' mean share shifts more modestly, from `r round(early_adult_share, 1)`% to `r round(late_adult_share, 1)`%.
+
+## 02 - The Randy effect
+
+This view compares Randy with the other selected adults. It measures each character's share of dialogue from this six-character adult group. For an example of a Randy-focused story, see the official *South Park* clip, ["On a Colorado Farm"](https://southpark.cc.com/video-clips/uyjz1j/south-park-on-a-colorado-farm).
+
+```{r}
+randy_plot <- adult_character_counts |>
+  ggplot(aes(
+    x = season_number,
+    y = share,
+    color = character,
+    text = paste(
+      "Season:", season_number,
+      "<br>Character:", character,
+      "<br>Lines:", lines,
+      "<br>Share of selected adult lines:", round(share, 1), "%"
+    )
+  )) +
+  geom_line(linewidth = 1) +
+  geom_point() +
+  scale_x_continuous(breaks = seasons) +
+  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
+  labs(
+    title = "Randy versus other recurring adults",
+    x = "Season",
+    y = "Share of selected adult dialogue",
+    color = "Character",
+    caption = "Source: southparkr package; click legend entries to show or hide characters."
+  ) +
+  theme_minimal()
+
+ggplotly(randy_plot, tooltip = "text")
+```
+
+Randy's share of the selected adults' dialogue rises from `r round(randy_start_share)`% in season 1 to `r round(randy_end_share)`% in season 21. However, the selected adults together account for `r round(adult_start_share, 1)`% of all recorded lines in season 1 and `r round(adult_end_share, 1)`% in season 21. Randy's rise is a major change in which adults speak; it does not mean that the whole adult group has a larger share than at the start.
+
+## 03 - Why did this happen?
+
+To explore adult-centered episodes, an episode is counted as adult-led when the six selected adults have more recorded dialogue lines than the four boys combined. This is a dialogue-based proxy, not an official classification of the episode's plot. Hover over a point to see the number of adult-led episodes and the season's total.
+
+```{r}
+adult_episode_plot <- adult_led_by_season |>
+  ggplot(aes(
+    x = season_number,
+    y = adult_led_share,
+    text = paste(
+      "Season:", season_number,
+      "<br>Adult-led episodes:", adult_led_count, "of", total_episodes,
+      "<br>Share:", round(adult_led_share, 1), "%"
+    )
+  )) +
+  geom_line(color = "#3973ac", linewidth = 1) +
+  geom_point(color = "#3973ac", size = 2) +
+  geom_vline(xintercept = c(18, 20), linetype = "dashed", color = "gray50") +
+  scale_x_continuous(breaks = seasons) +
+  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
+  labs(
+    title = "Adult-led dialogue episodes across seasons",
+    x = "Season",
+    y = "Adult-led episodes",
+    caption = "Dashed lines mark seasons 18 and 20, associated with serialized storylines."
+  ) +
+  theme_minimal()
+
+ggplotly(adult_episode_plot, tooltip = "text")
+```
+
+Seasons [18](https://en.wikipedia.org/wiki/South_Park_(season_18)) and [20](https://en.wikipedia.org/wiki/South_Park_(season_20)) provide context: season 18 featured continuing storylines, and season 20 used a more linear season-long arc. In season 20, `r season_20_count` of `r season_20_total` episodes (`r round(season_20_share)`%) meet this dialogue-based adult-led definition. The overlap is worth exploring, but it does not show that serialization caused adult dialogue to rise. A later [opinion review](https://www.yahoo.com/entertainment/tv/articles/review-south-park-somehow-still-110033226.html) discusses the show's more explicitly political subject matter; that article postdates the transcript data and is context, not evidence for this analysis.
+
+## 04 - Conclusion
+
+- **The data supports:** the boys' mean share of transcript lines falls from `r round(early_boys_share, 1)`% in seasons 1-7 to `r round(late_boys_share, 1)`% in seasons 15-21. The selected adults' mean share rises more modestly, from `r round(early_adult_share, 1)`% to `r round(late_adult_share, 1)`%.
+- **The data suggests:** Randy becomes dominant within the selected adult cast, accounting for `r round(randy_start_share)`% of its lines in season 1 and `r round(randy_end_share)`% in season 21. The adult-led episode measure also peaks during the serialized-storyline period in this dataset.
+- **The data cannot establish:** dialogue counts do not measure screen time, narrative importance, or what themes characters discuss. These transcripts alone cannot show that serialization or changing subject matter caused the observed shifts.
+
+The analysis covers only seasons 1-21 (1997-2017) and the selected adult characters listed above.

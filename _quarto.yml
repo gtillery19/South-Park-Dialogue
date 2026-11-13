@@ -1,6 +1,9 @@
 project:
   type: website
 
+metadata:
+  author: "Greta Tillery"
+
 website:
   title: "southparkranalysis"
   navbar:
@@ -8,6 +11,9 @@ website:
       - href: index.qmd
         text: Home
       - about.qmd
+
+execute:
+  echo: false
 
 format:
   html:
