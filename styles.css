@@ -71,3 +71,59 @@ a:not(.nav-link):hover {
   width: 100%;
   height: auto;
 }
+
+.episode-stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+
+.episode-stat-card {
+  padding: 1.25rem;
+  border: 1px solid #d5e5e8;
+  border-left: 6px solid var(--site-teal);
+  border-radius: 0.75rem;
+  background: #eaf5f7;
+  box-shadow: 0 0.5rem 1.25rem rgb(35 70 82 / 10%);
+}
+
+.episode-stat-card h3 {
+  margin: 0;
+  color: var(--site-teal);
+  font-size: 1.1rem;
+}
+
+.episode-stat-values {
+  margin: 0.5rem 0 0;
+  font-size: clamp(1.8rem, 5vw, 2.5rem);
+  font-weight: 700;
+  color: var(--site-deep-teal);
+}
+
+.episode-stat-values span:last-child {
+  color: var(--site-teal);
+}
+
+.episode-stat-caption {
+  margin: 0;
+  color: var(--site-ink);
+}
+
+.episode-stat-change {
+  margin: 0.75rem 0 0;
+  color: var(--site-teal);
+  font-weight: 700;
+}
+
+.adult-stat {
+  border-left-color: var(--site-rust);
+  background: #fff1eb;
+}
+
+.adult-stat h3,
+.adult-stat .episode-stat-values,
+.adult-stat .episode-stat-values span:last-child,
+.adult-stat .episode-stat-change {
+  color: var(--site-rust);
+}
