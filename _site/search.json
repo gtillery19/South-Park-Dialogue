@@ -38,8 +38,8 @@
     "objectID": "index.html#conclusion",
     "href": "index.html#conclusion",
     "title": "The Evolution of South Park",
-    "section": "04 - Conclusion",
-    "text": "04 - Conclusion\n\nThe data supports: the boys’ mean share of transcript lines falls from 37.5% in seasons 1-7 to 28.9% in seasons 15-21. The selected adults’ mean share rises more modestly, from 10.1% to 11.5%.\nThe data suggests: Randy becomes dominant within the selected adult cast, accounting for 4% of its lines in season 1 and 75% in season 21. The adult-led episode measure also peaks during the serialized-storyline period in this dataset.\nThe data cannot establish: dialogue counts do not measure screen time, narrative importance, or what themes characters discuss. These transcripts alone cannot show that serialization or changing subject matter caused the observed shifts.\n\nThe analysis covers only seasons 1-21 (1997-2017) and the selected adult characters listed above."
+    "section": "05 - Conclusion",
+    "text": "05 - Conclusion\n\nThe data supports: the boys’ mean share of transcript lines falls from 37.5% in seasons 1-7 to 28.9% in seasons 15-21. The selected adults’ mean share rises more modestly, from 10.1% to 11.5%.\nThe data suggests: Randy becomes dominant within the selected adult cast, accounting for 4% of its lines in season 1 and 75% in season 21. The adult-led episode measure also peaks during the serialized-storyline period in this dataset.\nThe data cannot establish: dialogue counts do not measure screen time, narrative importance, or what themes characters discuss. These transcripts alone cannot show that serialization or changing subject matter caused the observed shifts.\n\nThe analysis covers only seasons 1-21 (1997-2017) and the selected adult characters listed above."
   },
   {
     "objectID": "about.html",
@@ -75,5 +75,12 @@
     "title": "The Rise of Randy Marsh",
     "section": "Beyond the data",
     "text": "Beyond the data\nThe transcripts end at season 21, so they do not include season 22. That boundary matters: season 22 introduced Tegridy Farms, giving Randy an ongoing storyline largely independent of the boys. It is a later example of Randy-centered storytelling, not something this dataset can measure. See the season 22 overview and South Park: Randy on Prime Video.\nFor the full data investigation and methods, return to the Home page."
+  },
+  {
+    "objectID": "index.html#from-kid-led-to-adult-led-episodes",
+    "href": "index.html#from-kid-led-to-adult-led-episodes",
+    "title": "The Evolution of South Park",
+    "section": "04 - From kid-led to adult-led episodes",
+    "text": "04 - From kid-led to adult-led episodes\nThis comparison groups seasons 1-7 as early and seasons 15-21 as late, leaving seasons 8-14 out of the period comparison. An episode is adult-led when the six selected adults have more transcript lines than Stan, Kyle, Cartman, and Kenny combined; it is kid-led when the reverse is true. Episodes with equal line counts are ties. These are dialogue-based labels, not judgments about the episode’s plot.\n\n\n\n\n\n\n\n\n\nKid-led episodes\n\n\n93.7% to 78.2%\n\n\nEarly seasons to late seasons\n\n\nChange: -15.5 percentage points\n\n\n\n\nAdult-led episodes\n\n\n5.4% to 19.2%\n\n\nEarly seasons to late seasons\n\n\nChange: +13.8 percentage points\n\n\n\nIn the early period, 93.7% of episodes are kid-led and 5.4% are adult-led. In seasons 15-21, the kid-led share is 78.2% and the adult-led share is 19.2%. That is a 13.8 percentage-point increase in adult-led episodes and a -15.5 percentage-point change in kid-led episodes. This comparison describes a change in which group speaks more within an episode; it does not establish that the adults drive the story."
   }
 ]

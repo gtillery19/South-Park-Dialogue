@@ -101,8 +101,46 @@ adult_led_episodes <- episode_catalog |>
   ) |>
   mutate(
     across(c(boys, adults), \(x) replace_na(x, 0L)),
-    adult_led = adults > boys
+    adult_led = adults > boys,
+    leadership = case_when(
+      adults > boys ~ "Adult-led",
+      boys > adults ~ "Kid-led",
+      TRUE ~ "Tie"
+    )
   )
+
+leadership_period_summary <- adult_led_episodes |>
+  mutate(period = case_when(
+    season_number <= 7 ~ "Early (seasons 1-7)",
+    season_number >= 15 ~ "Late (seasons 15-21)",
+    TRUE ~ NA_character_
+  )) |>
+  filter(!is.na(period)) |>
+  count(period, leadership, name = "episodes") |>
+  complete(
+    period = c("Early (seasons 1-7)", "Late (seasons 15-21)"),
+    leadership = c("Kid-led", "Adult-led", "Tie"),
+    fill = list(episodes = 0)
+  ) |>
+  group_by(period) |>
+  mutate(
+    total_episodes = sum(episodes),
+    share = 100 * episodes / total_episodes
+  ) |>
+  ungroup()
+
+early_adult_led_share <- leadership_period_summary |>
+  filter(period == "Early (seasons 1-7)", leadership == "Adult-led") |>
+  pull(share)
+late_adult_led_share <- leadership_period_summary |>
+  filter(period == "Late (seasons 15-21)", leadership == "Adult-led") |>
+  pull(share)
+early_kid_led_share <- leadership_period_summary |>
+  filter(period == "Early (seasons 1-7)", leadership == "Kid-led") |>
+  pull(share)
+late_kid_led_share <- leadership_period_summary |>
+  filter(period == "Late (seasons 15-21)", leadership == "Kid-led") |>
+  pull(share)
 
 adult_led_by_season <- adult_led_episodes |>
   group_by(season_number) |>
@@ -223,7 +261,56 @@ ggplotly(adult_episode_plot, tooltip = "text")
 
 Seasons [18](https://en.wikipedia.org/wiki/South_Park_(season_18)) and [20](https://en.wikipedia.org/wiki/South_Park_(season_20)) provide context: season 18 featured continuing storylines, and season 20 used a more linear season-long arc. In season 20, `r season_20_count` of `r season_20_total` episodes (`r round(season_20_share)`%) meet this dialogue-based adult-led definition. The overlap is worth exploring, but it does not show that serialization caused adult dialogue to rise. A later [opinion review](https://www.yahoo.com/entertainment/tv/articles/review-south-park-somehow-still-110033226.html) discusses the show's more explicitly political subject matter; that article postdates the transcript data and is context, not evidence for this analysis.
 
-## 04 - Conclusion
+## 04 - From kid-led to adult-led episodes
+
+This comparison groups seasons 1-7 as early and seasons 15-21 as late, leaving seasons 8-14 out of the period comparison. An episode is **adult-led** when the six selected adults have more transcript lines than Stan, Kyle, Cartman, and Kenny combined; it is **kid-led** when the reverse is true. Episodes with equal line counts are ties. These are dialogue-based labels, not judgments about the episode's plot.
+
+```{r}
+leadership_period_plot <- leadership_period_summary |>
+  mutate(leadership = factor(leadership, levels = c("Kid-led", "Adult-led", "Tie"))) |>
+  ggplot(aes(
+    x = period,
+    y = share,
+    fill = leadership,
+    text = paste(
+      "Period:", period,
+      "<br>Episode type:", leadership,
+      "<br>Episodes:", episodes, "of", total_episodes,
+      "<br>Share:", round(share, 1), "%"
+    )
+  )) +
+  geom_col() +
+  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
+  labs(
+    title = "Episode dialogue leadership shifts toward adults",
+    x = NULL,
+    y = "Share of episodes",
+    fill = "Dialogue leader",
+    caption = "Source: southparkr transcript data; ties are included in each period's total."
+  ) +
+  theme_minimal()
+
+ggplotly(leadership_period_plot, tooltip = "text")
+```
+
+<div class="episode-stat-grid" role="group" aria-label="Episode leadership comparison">
+<article class="episode-stat-card kid-stat">
+<h3>Kid-led episodes</h3>
+<p class="episode-stat-values"><span>`r round(early_kid_led_share, 1)`%</span> to <span>`r round(late_kid_led_share, 1)`%</span></p>
+<p class="episode-stat-caption">Early seasons to late seasons</p>
+<p class="episode-stat-change">Change: `r sprintf("%+.1f", late_kid_led_share - early_kid_led_share)` percentage points</p>
+</article>
+<article class="episode-stat-card adult-stat">
+<h3>Adult-led episodes</h3>
+<p class="episode-stat-values"><span>`r round(early_adult_led_share, 1)`%</span> to <span>`r round(late_adult_led_share, 1)`%</span></p>
+<p class="episode-stat-caption">Early seasons to late seasons</p>
+<p class="episode-stat-change">Change: `r sprintf("%+.1f", late_adult_led_share - early_adult_led_share)` percentage points</p>
+</article>
+</div>
+
+In the early period, `r round(early_kid_led_share, 1)`% of episodes are kid-led and `r round(early_adult_led_share, 1)`% are adult-led. In seasons 15-21, the kid-led share is `r round(late_kid_led_share, 1)`% and the adult-led share is `r round(late_adult_led_share, 1)`%. That is a `r round(late_adult_led_share - early_adult_led_share, 1)` percentage-point increase in adult-led episodes and a `r round(late_kid_led_share - early_kid_led_share, 1)` percentage-point change in kid-led episodes. This comparison describes a change in which group speaks more within an episode; it does not establish that the adults drive the story.
+
+## 05 - Conclusion
 
 - **The data supports:** the boys' mean share of transcript lines falls from `r round(early_boys_share, 1)`% in seasons 1-7 to `r round(late_boys_share, 1)`% in seasons 15-21. The selected adults' mean share rises more modestly, from `r round(early_adult_share, 1)`% to `r round(late_adult_share, 1)`%.
 - **The data suggests:** Randy becomes dominant within the selected adult cast, accounting for `r round(randy_start_share)`% of its lines in season 1 and `r round(randy_end_share)`% in season 21. The adult-led episode measure also peaks during the serialized-storyline period in this dataset.
