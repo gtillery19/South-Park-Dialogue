@@ -12,7 +12,14 @@ website:
         text: Home
       - href: story.qmd
         text: Story
-      - about.qmd
+      - href: methods.qmd
+        text: Stan vs. Randy
+      - href: conclusion.qmd
+        text: Kid-led vs. Adult-led
+      - href: episode-explorer.qmd
+        text: Season Explorer
+      - href: about.qmd
+        text: About
 
 execute:
   echo: false

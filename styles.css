@@ -1,21 +1,21 @@
 /* css styles */
 :root {
-  --site-ink: #263d45;
-  --site-teal: #245c68;
-  --site-deep-teal: #173f49;
-  --site-rust: #a63f29;
-  --site-gold: #e6b958;
-  --site-paper: #f3f8f6;
+  --site-ink: #152e34;
+  --site-teal: #0d4f5c;
+  --site-deep-teal: #092f38;
+  --site-rust: #872b1a;
+  --site-gold: #c78d08;
+  --site-paper: #f9fbfa;
 }
 
 body {
   color: var(--site-ink);
-  background: linear-gradient(180deg, #eaf5f7 0, var(--site-paper) 24rem);
+  background: linear-gradient(180deg, #dceff2 0, var(--site-paper) 24rem);
 }
 
 #quarto-header .navbar {
   background-color: var(--site-deep-teal) !important;
-  border-bottom: 4px solid var(--site-gold);
+  border-bottom: 4px solid #d5a01b;
 }
 
 #quarto-header .navbar-brand,
@@ -52,7 +52,7 @@ a:not(.nav-link):hover {
 
 .plotly.html-widget {
   overflow: hidden;
-  border: 1px solid #d5e5e8;
+  border: 1px solid #91b2ba;
   border-radius: 0.75rem;
   background-color: #fff;
   box-shadow: 0 0.5rem 1.25rem rgb(35 70 82 / 10%);
@@ -61,7 +61,7 @@ a:not(.nav-link):hover {
 .story-banner {
   margin: 1rem 0 2.25rem;
   overflow: hidden;
-  border: 1px solid #d5e5e8;
+  border: 1px solid #91b2ba;
   border-radius: 1rem;
   box-shadow: 0 0.75rem 1.75rem rgb(35 70 82 / 14%);
 }
@@ -79,12 +79,43 @@ a:not(.nav-link):hover {
   margin: 1.5rem 0;
 }
 
+.home-stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+  margin: 1.5rem 0 2rem;
+}
+
+.home-stat-card {
+  padding: 1.25rem;
+  border: 1px solid #91b2ba;
+  border-top: 5px solid var(--site-teal);
+  border-radius: 0.75rem;
+  background: #e2f1f4;
+  box-shadow: 0 0.5rem 1.25rem rgb(35 70 82 / 10%);
+}
+
+.home-stat-card:nth-child(2) {
+  border-top-color: var(--site-rust);
+  background: #ffede6;
+}
+
+.home-stat-card:nth-child(3) {
+  border-top-color: #916300;
+}
+
+.home-stat-card h3 {
+  margin: 0;
+  color: var(--site-teal);
+  font-size: 1.1rem;
+}
+
 .episode-stat-card {
   padding: 1.25rem;
-  border: 1px solid #d5e5e8;
+  border: 1px solid #91b2ba;
   border-left: 6px solid var(--site-teal);
   border-radius: 0.75rem;
-  background: #eaf5f7;
+  background: #e2f1f4;
   box-shadow: 0 0.5rem 1.25rem rgb(35 70 82 / 10%);
 }
 
@@ -118,7 +149,7 @@ a:not(.nav-link):hover {
 
 .adult-stat {
   border-left-color: var(--site-rust);
-  background: #fff1eb;
+  background: #ffede6;
 }
 
 .adult-stat h3,

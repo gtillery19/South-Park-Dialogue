@@ -1,5 +1,12 @@
 [
   {
+    "objectID": "methods.html",
+    "href": "methods.html",
+    "title": "Stan vs. Randy",
+    "section": "",
+    "text": "This comparison uses recorded transcript lines from seasons 1-21. Each character’s line count is shown as a share of all transcript lines in that season.\n\n\n\n\n\n\n\n\n\nAverage dialogue share in early and late seasons\n\n\nPeriod\nRandy Marsh\nStan Marsh\n\n\n\n\nEarly\n2.1\n11.9\n\n\nLate\n6.0\n6.1\n\n\n\n\n\nRandy’s later-period share is compared with Stan’s so the change is visible in one set of values. This is a dialogue measure, not a measure of screen time or narrative importance."
+  },
+  {
     "objectID": "index.html",
     "href": "index.html",
     "title": "The Evolution of South Park",
@@ -12,6 +19,13 @@
     "title": "The Evolution of South Park",
     "section": "",
     "text": "South Park began with four elementary-school students at its center. As the series progressed, adult characters - especially Randy - became more prominent in its storytelling. This investigation asks whether the dialogue data supports that shift and what it can tell us about it.\nThe analysis uses transcript lines from the southparkr package, covering seasons 1-21 (1997-2017). Dialogue share measures who speaks, not screen time or story importance. The selected adult cast is Randy, Mr. Garrison, Chef, Gerald, Sharon, and Mr. Mackey."
+  },
+  {
+    "objectID": "index.html#at-a-glance",
+    "href": "index.html#at-a-glance",
+    "title": "The Evolution of South Park",
+    "section": "At a glance",
+    "text": "At a glance\n\n\n\nFour boys’ dialogue share\n\n\n37.5% to 28.9%\n\n\nMean share of all transcript lines, seasons 1-7 to 15-21\n\n\n\n\nAdult-led episodes\n\n\n5.4% to 19.2%\n\n\nShare of episodes, seasons 1-7 to 15-21\n\n\n\n\nRandy’s share of selected adult dialogue\n\n\n3.9% to 74.8%\n\n\nSeason 1 compared with season 21"
   },
   {
     "objectID": "index.html#the-changing-cast",
@@ -35,18 +49,18 @@
     "text": "03 - Why did this happen?\nTo explore adult-centered episodes, an episode is counted as adult-led when the six selected adults have more recorded dialogue lines than the four boys combined. This is a dialogue-based proxy, not an official classification of the episode’s plot. Hover over a point to see the number of adult-led episodes and the season’s total.\n\n\n\n\n\n\nSeasons 18 and 20 provide context: season 18 featured continuing storylines, and season 20 used a more linear season-long arc. In season 20, 4 of 10 episodes (40%) meet this dialogue-based adult-led definition. The overlap is worth exploring, but it does not show that serialization caused adult dialogue to rise. A later opinion review discusses the show’s more explicitly political subject matter; that article postdates the transcript data and is context, not evidence for this analysis."
   },
   {
-    "objectID": "index.html#conclusion",
-    "href": "index.html#conclusion",
+    "objectID": "index.html#from-kid-led-to-adult-led-episodes",
+    "href": "index.html#from-kid-led-to-adult-led-episodes",
     "title": "The Evolution of South Park",
-    "section": "05 - Conclusion",
-    "text": "05 - Conclusion\n\nThe data supports: the boys’ mean share of transcript lines falls from 37.5% in seasons 1-7 to 28.9% in seasons 15-21. The selected adults’ mean share rises more modestly, from 10.1% to 11.5%.\nThe data suggests: Randy becomes dominant within the selected adult cast, accounting for 4% of its lines in season 1 and 75% in season 21. The adult-led episode measure also peaks during the serialized-storyline period in this dataset.\nThe data cannot establish: dialogue counts do not measure screen time, narrative importance, or what themes characters discuss. These transcripts alone cannot show that serialization or changing subject matter caused the observed shifts.\n\nThe analysis covers only seasons 1-21 (1997-2017) and the selected adult characters listed above."
+    "section": "04 - From kid-led to adult-led episodes",
+    "text": "04 - From kid-led to adult-led episodes\nThis comparison groups seasons 1-7 as early and seasons 15-21 as late, leaving seasons 8-14 out of the period comparison. An episode is adult-led when the six selected adults have more transcript lines than Stan, Kyle, Cartman, and Kenny combined; it is kid-led when the reverse is true. Episodes with equal line counts are ties. These are dialogue-based labels, not judgments about the episode’s plot.\n\n\n\n\n\n\n\n\n\nKid-led episodes\n\n\n93.7% to 78.2%\n\n\nEarly seasons to late seasons\n\n\nChange: -15.5 percentage points\n\n\n\n\nAdult-led episodes\n\n\n5.4% to 19.2%\n\n\nEarly seasons to late seasons\n\n\nChange: +13.8 percentage points\n\n\n\nIn the early period, 93.7% of episodes are kid-led and 5.4% are adult-led. In seasons 15-21, the kid-led share is 78.2% and the adult-led share is 19.2%. That is a 13.8 percentage-point increase in adult-led episodes and a -15.5 percentage-point change in kid-led episodes. This comparison describes a change in which group speaks more within an episode; it does not establish that the adults drive the story."
   },
   {
-    "objectID": "about.html",
-    "href": "about.html",
-    "title": "About",
-    "section": "",
-    "text": "About this site\nAuthor: Greta Tillery"
+    "objectID": "index.html#summary",
+    "href": "index.html#summary",
+    "title": "The Evolution of South Park",
+    "section": "05 - Summary",
+    "text": "05 - Summary\nThe boys’ mean share of transcript lines falls from 37.5% in seasons 1-7 to 28.9% in seasons 15-21. The selected adults’ mean share rises more modestly, from 10.1% to 11.5%.\nRandy becomes dominant within the selected adult cast, accounting for 4% of its lines in season 1 and 75% in season 21. The adult-led episode measure also peaks during the serialized-storyline period in this dataset.\nFor the concise takeaway, see Findings. For data definitions and limitations, see Methods."
   },
   {
     "objectID": "story.html#the-discovery",
@@ -77,10 +91,38 @@
     "text": "Beyond the data\nThe transcripts end at season 21, so they do not include season 22. That boundary matters: season 22 introduced Tegridy Farms, giving Randy an ongoing storyline largely independent of the boys. It is a later example of Randy-centered storytelling, not something this dataset can measure. See the season 22 overview and South Park: Randy on Prime Video.\nFor the full data investigation and methods, return to the Home page."
   },
   {
-    "objectID": "index.html#from-kid-led-to-adult-led-episodes",
-    "href": "index.html#from-kid-led-to-adult-led-episodes",
-    "title": "The Evolution of South Park",
-    "section": "04 - From kid-led to adult-led episodes",
-    "text": "04 - From kid-led to adult-led episodes\nThis comparison groups seasons 1-7 as early and seasons 15-21 as late, leaving seasons 8-14 out of the period comparison. An episode is adult-led when the six selected adults have more transcript lines than Stan, Kyle, Cartman, and Kenny combined; it is kid-led when the reverse is true. Episodes with equal line counts are ties. These are dialogue-based labels, not judgments about the episode’s plot.\n\n\n\n\n\n\n\n\n\nKid-led episodes\n\n\n93.7% to 78.2%\n\n\nEarly seasons to late seasons\n\n\nChange: -15.5 percentage points\n\n\n\n\nAdult-led episodes\n\n\n5.4% to 19.2%\n\n\nEarly seasons to late seasons\n\n\nChange: +13.8 percentage points\n\n\n\nIn the early period, 93.7% of episodes are kid-led and 5.4% are adult-led. In seasons 15-21, the kid-led share is 78.2% and the adult-led share is 19.2%. That is a 13.8 percentage-point increase in adult-led episodes and a -15.5 percentage-point change in kid-led episodes. This comparison describes a change in which group speaks more within an episode; it does not establish that the adults drive the story."
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
+    "section": "",
+    "text": "Greta Tillery\n\nEmail: g.tillery30@ncf.edu\nGitHub: gtillery19\nProject repository: South-Park-Dialogue\nNew College of Florida"
+  },
+  {
+    "objectID": "about.html#about-me",
+    "href": "about.html#about-me",
+    "title": "About",
+    "section": "",
+    "text": "Greta Tillery\n\nEmail: g.tillery30@ncf.edu\nGitHub: gtillery19\nProject repository: South-Park-Dialogue\nNew College of Florida"
+  },
+  {
+    "objectID": "about.html#data-source",
+    "href": "about.html#data-source",
+    "title": "About",
+    "section": "Data source",
+    "text": "Data source\nThe dialogue analysis uses transcript lines from the southparkr R package, covering South Park seasons 1-21 (1997-2017). The transcripts identify the speaking character and episode; the analysis counts those lines to compare character and group dialogue. Dialogue counts describe who speaks, not screen time or story importance."
+  },
+  {
+    "objectID": "episode-explorer.html",
+    "href": "episode-explorer.html",
+    "title": "Episode Leadership Across Seasons",
+    "section": "",
+    "text": "The other episode comparison groups seasons 1-7 and 15-21. Here, each season is shown separately to make changes over time easier to explore. An episode is kid-led when the four boys have more lines, adult-led when the six selected adults have more, and a tie when their recorded line counts are equal.\n\n\n\n\n\n\n\n\n\nEpisode counts and shares by season\n\n\n\n\n\n\n\n\n\n\n\n\nseason_number\ntotal_episodes\nepisodes_Adult-led\nepisodes_Kid-led\nepisodes_Tie\nshare_Adult-led\nshare_Kid-led\nshare_Tie\n\n\n\n\n1\n13\n0\n13\n0\n0.0\n100.0\n0.0\n\n\n2\n18\n1\n17\n0\n5.6\n94.4\n0.0\n\n\n3\n17\n1\n16\n0\n5.9\n94.1\n0.0\n\n\n4\n17\n0\n16\n1\n0.0\n94.1\n5.9\n\n\n5\n14\n0\n14\n0\n0.0\n100.0\n0.0\n\n\n6\n17\n2\n15\n0\n11.8\n88.2\n0.0\n\n\n7\n15\n2\n13\n0\n13.3\n86.7\n0.0\n\n\n8\n14\n0\n14\n0\n0.0\n100.0\n0.0\n\n\n9\n14\n1\n13\n0\n7.1\n92.9\n0.0\n\n\n10\n14\n0\n13\n1\n0.0\n92.9\n7.1\n\n\n11\n14\n2\n12\n0\n14.3\n85.7\n0.0\n\n\n12\n14\n2\n12\n0\n14.3\n85.7\n0.0\n\n\n13\n14\n2\n12\n0\n14.3\n85.7\n0.0\n\n\n14\n14\n1\n11\n2\n7.1\n78.6\n14.3\n\n\n15\n14\n3\n11\n0\n21.4\n78.6\n0.0\n\n\n16\n14\n1\n13\n0\n7.1\n92.9\n0.0\n\n\n17\n10\n1\n8\n1\n10.0\n80.0\n10.0\n\n\n18\n10\n1\n9\n0\n10.0\n90.0\n0.0\n\n\n19\n10\n3\n6\n1\n30.0\n60.0\n10.0\n\n\n20\n10\n4\n6\n0\n40.0\n60.0\n0.0\n\n\n21\n10\n2\n8\n0\n20.0\n80.0\n0.0\n\n\n\n\n\nUse the chart’s hover labels to see the episode counts behind each point. A high adult-led share means more episodes in that season have more dialogue from the selected adults; it does not establish that the adults drive the plot."
+  },
+  {
+    "objectID": "conclusion.html",
+    "href": "conclusion.html",
+    "title": "Kid-led vs. Adult-led Episodes",
+    "section": "",
+    "text": "This comparison defines an episode by recorded dialogue: it is kid-led when Stan, Kyle, Cartman, and Kenny have more transcript lines than Randy, Mr. Garrison, Chef, Gerald, Sharon, and Mr. Mackey. It is adult-led when the selected adults have more lines.\n\n\n\n\n\n\n\n\n\nEpisode leadership counts and shares\n\n\n\n\n\n\n\n\n\n\n\nperiod\nepisodes_Adult-led\nepisodes_Kid-led\nepisodes_Tie\nshare_Adult-led\nshare_Kid-led\nshare_Tie\n\n\n\n\nEarly (seasons 1-7)\n6\n104\n1\n5.4\n93.7\n0.9\n\n\nLate (seasons 15-21)\n15\n61\n2\n19.2\n78.2\n2.6\n\n\n\n\n\nFor the period comparison, seasons 1-7 are grouped as early and seasons 15-21 as late; seasons 8-14 are excluded. These labels describe recorded dialogue, not an episode’s plot or official characterization."
   }
 ]

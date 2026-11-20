@@ -109,6 +109,7 @@ randy_stan_plot <- randy_stan_by_season |>
   )) +
   geom_line(linewidth = 1) +
   geom_point() +
+  scale_color_manual(values = c("Randy Marsh" = "#005A9C", "Stan Marsh" = "#A33A13")) +
   scale_x_continuous(breaks = seasons) +
   scale_y_continuous(labels = scales::label_percent(scale = 1)) +
   labs(

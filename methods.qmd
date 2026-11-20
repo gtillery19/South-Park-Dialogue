@@ -1,0 +1,89 @@
+---
+title: "Stan vs. Randy"
+subtitle: "TWO CHARACTER DIALOGUE TRENDS"
+format: html
+---
+
+This comparison uses recorded transcript lines from seasons 1-21. Each character's line count is shown as a share of all transcript lines in that season.
+
+```{r}
+#| echo: false
+#| message: false
+library(tidyverse)
+library(southparkr)
+library(plotly)
+
+dialogue_lines <- episode_lines |>
+  mutate(character = str_remove_all(character, "[:\"]"))
+
+season_totals <- dialogue_lines |>
+  count(season_number, name = "all_lines")
+
+seasons <- sort(unique(dialogue_lines$season_number))
+
+stan_randy <- dialogue_lines |>
+  filter(character %in% c("Stan", "Randy")) |>
+  count(season_number, character, name = "lines") |>
+  complete(
+    season_number = seasons,
+    character = c("Stan", "Randy"),
+    fill = list(lines = 0)
+  ) |>
+  left_join(season_totals, by = "season_number") |>
+  mutate(
+    share = 100 * lines / all_lines,
+    character = recode(character, Stan = "Stan Marsh", Randy = "Randy Marsh")
+  )
+
+stan_randy_plot <- stan_randy |>
+  ggplot(aes(
+    x = season_number,
+    y = share,
+    color = character,
+    group = character,
+    text = paste(
+      "Season:", season_number,
+      "<br>Character:", character,
+      "<br>Transcript lines:", lines,
+      "<br>Share of all lines:", round(share, 2), "%"
+    )
+  )) +
+  geom_line(linewidth = 1) +
+  geom_point() +
+  scale_color_manual(values = c("Randy Marsh" = "#005A9C", "Stan Marsh" = "#A33A13")) +
+  scale_x_continuous(breaks = seasons) +
+  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
+  labs(
+    title = "Stan and Randy's dialogue share by season",
+    x = "Season",
+    y = "Share of all transcript lines",
+    color = "Character",
+    caption = "Source: southparkr transcript data"
+  ) +
+  theme_minimal()
+
+ggplotly(stan_randy_plot, tooltip = "text")
+```
+
+```{r}
+#| echo: false
+period_values <- stan_randy |>
+  mutate(period = case_when(
+    season_number <= 7 ~ "Early",
+    season_number >= 15 ~ "Late",
+    TRUE ~ NA_character_
+  )) |>
+  filter(!is.na(period)) |>
+  group_by(period, character) |>
+  summarise(mean_share = mean(share), .groups = "drop") |>
+  pivot_wider(names_from = character, values_from = mean_share)
+
+knitr::kable(
+  period_values,
+  digits = 1,
+  col.names = c("Period", "Randy Marsh", "Stan Marsh"),
+  caption = "Average dialogue share in early and late seasons"
+)
+```
+
+Randy's later-period share is compared with Stan's so the change is visible in one set of values. This is a dialogue measure, not a measure of screen time or narrative importance.

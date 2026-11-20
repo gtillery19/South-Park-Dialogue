@@ -1,0 +1,106 @@
+---
+title: "Episode Leadership Across Seasons"
+subtitle: "EXPLORE THE DIALOGUE SEASON BY SEASON"
+format: html
+---
+
+The other episode comparison groups seasons 1-7 and 15-21. Here, each season is shown separately to make changes over time easier to explore. An episode is kid-led when the four boys have more lines, adult-led when the six selected adults have more, and a tie when their recorded line counts are equal.
+
+```{r}
+#| echo: false
+#| message: false
+library(tidyverse)
+library(southparkr)
+library(plotly)
+
+core_boys <- c("Stan", "Kyle", "Cartman", "Kenny")
+selected_adults <- c("Randy", "Mr. Garrison", "Chef", "Gerald", "Sharon", "Mr. Mackey")
+
+dialogue_lines <- episode_lines |>
+  mutate(character = str_remove_all(character, "[:\"]"))
+
+episode_catalog <- dialogue_lines |>
+  distinct(season_number, season_episode_number, episode_name)
+
+episode_cast_counts <- dialogue_lines |>
+  filter(character %in% c(core_boys, selected_adults)) |>
+  mutate(cast = if_else(character %in% core_boys, "kids", "adults")) |>
+  count(season_number, season_episode_number, episode_name, cast, name = "lines") |>
+  pivot_wider(names_from = cast, values_from = lines, values_fill = 0)
+
+episode_leadership <- episode_catalog |>
+  left_join(
+    episode_cast_counts,
+    by = c("season_number", "season_episode_number", "episode_name")
+  ) |>
+  mutate(
+    across(c(kids, adults), \(x) replace_na(x, 0L)),
+    leadership = case_when(
+      adults > kids ~ "Adult-led",
+      kids > adults ~ "Kid-led",
+      TRUE ~ "Tie"
+    )
+  )
+
+leadership_by_season <- episode_leadership |>
+  count(season_number, leadership, name = "episodes") |>
+  complete(
+    season_number = sort(unique(episode_leadership$season_number)),
+    leadership = c("Kid-led", "Adult-led", "Tie"),
+    fill = list(episodes = 0)
+  ) |>
+  group_by(season_number) |>
+  mutate(
+    total_episodes = sum(episodes),
+    share = 100 * episodes / total_episodes,
+    leadership = factor(leadership, levels = c("Kid-led", "Adult-led", "Tie"))
+  ) |>
+  ungroup()
+
+season_leadership_plot <- leadership_by_season |>
+  ggplot(aes(
+    x = season_number,
+    y = share,
+    color = leadership,
+    group = leadership,
+    text = paste(
+      "Season:", season_number,
+      "<br>Dialogue leader:", leadership,
+      "<br>Episodes:", episodes, "of", total_episodes,
+      "<br>Share:", round(share, 1), "%"
+    )
+  )) +
+  geom_line(linewidth = 1) +
+  geom_point() +
+  scale_x_continuous(breaks = sort(unique(leadership_by_season$season_number))) +
+  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
+  scale_color_manual(values = c("Kid-led" = "#005A9C", "Adult-led" = "#A33A13", "Tie" = "#4F5B5E")) +
+  labs(
+    title = "Episode dialogue leadership by season",
+    x = "Season",
+    y = "Share of episodes",
+    color = "Dialogue leader",
+    caption = "Source: southparkr transcript data"
+  ) +
+  theme_minimal()
+
+ggplotly(season_leadership_plot, tooltip = "text")
+```
+
+```{r}
+#| echo: false
+season_leadership_table <- leadership_by_season |>
+  select(season_number, total_episodes, leadership, episodes, share) |>
+  mutate(share = round(share, 1)) |>
+  pivot_wider(
+    names_from = leadership,
+    values_from = c(episodes, share)
+  )
+
+knitr::kable(
+  season_leadership_table,
+  caption = "Episode counts and shares by season"
+)
+```
+
+Use the chart's hover labels to see the episode counts behind each point. A high adult-led share means more episodes in that season have more dialogue from the selected adults; it does not establish that the adults drive the plot.

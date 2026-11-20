@@ -1,0 +1,106 @@
+---
+title: "Kid-led vs. Adult-led Episodes"
+subtitle: "WHICH GROUP SPEAKS MORE?"
+format: html
+---
+
+This comparison defines an episode by recorded dialogue: it is kid-led when Stan, Kyle, Cartman, and Kenny have more transcript lines than Randy, Mr. Garrison, Chef, Gerald, Sharon, and Mr. Mackey. It is adult-led when the selected adults have more lines.
+
+```{r}
+#| echo: false
+#| message: false
+library(tidyverse)
+library(southparkr)
+library(plotly)
+
+core_boys <- c("Stan", "Kyle", "Cartman", "Kenny")
+selected_adults <- c("Randy", "Mr. Garrison", "Chef", "Gerald", "Sharon", "Mr. Mackey")
+
+dialogue_lines <- episode_lines |>
+  mutate(character = str_remove_all(character, "[:\"]"))
+
+episode_catalog <- dialogue_lines |>
+  distinct(season_number, season_episode_number, episode_name)
+
+episode_cast_counts <- dialogue_lines |>
+  filter(character %in% c(core_boys, selected_adults)) |>
+  mutate(cast = if_else(character %in% core_boys, "kids", "adults")) |>
+  count(season_number, season_episode_number, episode_name, cast, name = "lines") |>
+  pivot_wider(names_from = cast, values_from = lines, values_fill = 0)
+
+episode_leadership <- episode_catalog |>
+  left_join(
+    episode_cast_counts,
+    by = c("season_number", "season_episode_number", "episode_name")
+  ) |>
+  mutate(
+    across(c(kids, adults), \(x) replace_na(x, 0L)),
+    leadership = case_when(
+      adults > kids ~ "Adult-led",
+      kids > adults ~ "Kid-led",
+      TRUE ~ "Tie"
+    )
+  )
+
+period_summary <- episode_leadership |>
+  mutate(period = case_when(
+    season_number <= 7 ~ "Early (seasons 1-7)",
+    season_number >= 15 ~ "Late (seasons 15-21)",
+    TRUE ~ NA_character_
+  )) |>
+  filter(!is.na(period)) |>
+  count(period, leadership, name = "episodes") |>
+  complete(
+    period = c("Early (seasons 1-7)", "Late (seasons 15-21)"),
+    leadership = c("Kid-led", "Adult-led", "Tie"),
+    fill = list(episodes = 0)
+  ) |>
+  group_by(period) |>
+  mutate(share = 100 * episodes / sum(episodes)) |>
+  ungroup()
+
+leadership_plot <- period_summary |>
+  mutate(leadership = factor(leadership, levels = c("Kid-led", "Adult-led", "Tie"))) |>
+  ggplot(aes(
+    x = period,
+    y = share,
+    fill = leadership,
+    text = paste(
+      "Period:", period,
+      "<br>Episode type:", leadership,
+      "<br>Episodes:", episodes,
+      "<br>Share:", round(share, 1), "%"
+    )
+  )) +
+  geom_col() +
+  scale_y_continuous(labels = scales::label_percent(scale = 1)) +
+  scale_fill_manual(values = c("Kid-led" = "#005A9C", "Adult-led" = "#A33A13", "Tie" = "#4F5B5E")) +
+  labs(
+    title = "Episode leadership in early and late seasons",
+    x = NULL,
+    y = "Share of episodes",
+    fill = "Dialogue leader",
+    caption = "Source: southparkr transcript data"
+  ) +
+  theme_minimal()
+
+ggplotly(leadership_plot, tooltip = "text")
+```
+
+```{r}
+#| echo: false
+leadership_table <- period_summary |>
+  select(period, leadership, episodes, share) |>
+  mutate(share = round(share, 1)) |>
+  pivot_wider(
+    names_from = leadership,
+    values_from = c(episodes, share)
+  )
+
+knitr::kable(
+  leadership_table,
+  caption = "Episode leadership counts and shares"
+)
+```
+
+For the period comparison, seasons 1-7 are grouped as early and seasons 15-21 as late; seasons 8-14 are excluded. These labels describe recorded dialogue, not an episode's plot or official characterization.

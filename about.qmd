@@ -2,6 +2,15 @@
 title: "About"
 ---
 
-# About this site
+## About me
 
-Author: Greta Tillery
+**Greta Tillery**
+
+- Email: [g.tillery30@ncf.edu](mailto:g.tillery30@ncf.edu)
+- GitHub: [gtillery19](https://github.com/gtillery19)
+- Project repository: [South-Park-Dialogue](https://github.com/gtillery19/South-Park-Dialogue)
+- [New College of Florida](https://www.ncf.edu/)
+
+## Data source
+
+The dialogue analysis uses transcript lines from the [`southparkr` R package](https://github.com/pdrhlik/southparkr), covering *South Park* seasons 1-21 (1997-2017). The transcripts identify the speaking character and episode; the analysis counts those lines to compare character and group dialogue. Dialogue counts describe who speaks, not screen time or story importance.
